@@ -3,6 +3,7 @@
     @click="updateTask({id: id, updates: {completed: !task.completed} })"
     :class="!task.completed ? 'bg-orange-1' : 'bg-green-1'"
     clickable
+    v-touch-hold:1000.mouse="showEditTaskModal"
     v-ripple>
     <q-item-section side top>
       <q-checkbox v-model="task.completed"
@@ -13,8 +14,9 @@
     <q-item-section>
       <q-item-label
         :class="{ 'text-strikethrough' : task.completed }"
+      v-html="$options.filters.searchHighlight(task.name, search)"
       >
-        {{ task.name }} </q-item-label>
+         </q-item-label>
     </q-item-section>
 
     <q-item-section
@@ -30,7 +32,7 @@
         <div class="column">
           <q-item-label caption
                         class="row justify-end"
-          >{{ task.dueDate }}</q-item-label>
+          >{{ task.dueDate | niceDate}}</q-item-label>
           <q-item-label
             class="row justify-end"
             caption>
@@ -44,7 +46,7 @@
       <q-item-section side>
         <div class="row">
         <q-btn
-          @click.stop="showEditTask = true"
+          @click.stop="showEditTaskModal"
           flat
           round
           dense
@@ -72,13 +74,19 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
+import {date} from 'quasar'
+const {addToDate} = date
+
 export default {
   props: ['task', 'id'],
   data(){
     return{
       showEditTask: false
     }
+  },
+  computed:{
+    ...mapState('tasks', ['search'])
   },
   methods:{
     ...mapActions('tasks', ['updateTask', 'deleteTask']),
@@ -96,6 +104,25 @@ export default {
         }).onOk(() => {
           this.deleteTask(id)
         })
+    },
+    showEditTaskModal() {
+      this.showEditTask = true
+    }
+  },
+  filters: {
+
+    niceDate(value){
+      return date.formatDate(value, 'MMM D')
+    },
+    searchHighlight(value, search) {
+      if (search){
+        let searchRegExp = new RegExp(search, 'ig')
+        return value.replace(searchRegExp, (match) =>{
+          return '<span class="bg-yellow-6">' + match + '</span>'
+        })
+      }
+      return value
+
     }
   },
   components:{

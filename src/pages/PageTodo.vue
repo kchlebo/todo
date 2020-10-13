@@ -1,39 +1,49 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row q-mb-lg">
+  <q-page>
+    <div class="q-pa-md absolute full-width full-height column">
+      <div class="row q-mb-lg">
 
-      <search></search>
-      <sort></sort>
-    </div>
+        <search></search>
+        <sort></sort>
+      </div>
 
 
-    <p
-      v-if="search && !Object.keys(tasksTodo).length &&
+      <p
+        v-if="search && !Object.keys(tasksTodo).length &&
 !Object.keys(tasksCompleted).length"
-    >No search results</p>
-    <no-tasks
-      v-if="!Object.keys(tasksTodo).length &&
+      >No search results</p>
+
+      <q-scroll-area
+      class="q-scroll-area-tasks"
+      >
+        <no-tasks
+          v-if="!Object.keys(tasksTodo).length &&
 !search"
 
-    ></no-tasks>
-    <tasks-todo
-      v-if="Object.keys(tasksTodo).length"
-      :tasksTodo="tasksTodo"
-    ></tasks-todo>
+        ></no-tasks>
+        <tasks-todo
+          v-if="Object.keys(tasksTodo).length"
+          :tasksTodo="tasksTodo"
+        ></tasks-todo>
 
-    <tasks-completed
-      v-if="Object.keys(tasksCompleted).length"
-      :tasksCompleted="tasksCompleted"
-    ></tasks-completed>
+        <tasks-completed
+          v-if="Object.keys(tasksCompleted).length"
+          :tasksCompleted="tasksCompleted"
+          class="q-mb-xl"
+        ></tasks-completed>
 
-    <div class="absolute-bottom text-center q-mb-lg">
-      <q-btn
-        @click="showAddTask = true"
-        round
-        color="primary"
-        size="24px"
-        icon="add"
-      />
+      </q-scroll-area>
+
+      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+        <q-btn
+          class="all-pointer-events"
+          @click="showAddTask = true"
+          round
+          color="primary"
+          size="24px"
+          icon="add"
+        />
+      </div>
     </div>
     <q-dialog v-model="showAddTask">
       <add-task @close="showAddTask = false"></add-task>
@@ -73,5 +83,8 @@ export default {
 }
 </script>
 <style>
-
+ .q-scroll-area-tasks{
+   display: flex;
+   flex-grow: 1;
+ }
 </style>

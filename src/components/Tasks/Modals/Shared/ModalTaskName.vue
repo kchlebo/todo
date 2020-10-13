@@ -4,6 +4,7 @@
       autofocus
       clearable
       outlined
+      v-select-all
       :value="name"
       @input="$emit('update:name', $event)"
       class="col"
@@ -14,8 +15,13 @@
 </template>
 
 <script>
+import {selectAll} from "src/directives/directive-select-all";
+
 export default {
-  props: ['name']
+  props: ['name'],
+  directives: {
+      selectAll
+  }
 }
 </script>
 
