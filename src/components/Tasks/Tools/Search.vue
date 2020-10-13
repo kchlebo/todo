@@ -1,5 +1,5 @@
 <template>
-
+<div class="col">
   <q-input
     bottom-slots
     outlined
@@ -12,7 +12,7 @@
       <q-icon name="search" />
     </template>
   </q-input>
-
+</div>
 </template>
 
 <script>

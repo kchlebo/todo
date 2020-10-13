@@ -1,8 +1,11 @@
 <template>
   <q-page class="q-pa-md">
     <div class="row q-mb-lg">
+
       <search></search>
+      <sort></sort>
     </div>
+
 
     <p
       v-if="search && !Object.keys(tasksTodo).length &&
@@ -64,6 +67,7 @@ export default {
     'tasks-completed': require('components/Tasks/TasksCompleted').default,
     'no-tasks': require('components/Tasks/NoTasks').default,
     'search': require('components/Tasks/Tools/Search').default,
+    'sort': require('components/Tasks/Tools/Sort').default,
   }
 
 }
