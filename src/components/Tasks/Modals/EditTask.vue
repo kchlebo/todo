@@ -1,12 +1,12 @@
 <template>
   <q-card>
-    <modal-header>Add task</modal-header>
+    <modal-header>Edit task</modal-header>
 
     <q-form @submit.prevent="submitForm">
       <q-card-section class="q-pt-none">
         <modal-task-name
           :name.sync="taskToSubmit.name"
-        ref="modalTaskName"
+          ref="modalTaskName"
         ></modal-task-name>
         <modal-due-date :dueDate.sync="taskToSubmit.dueDate"></modal-due-date>
         <modal-due-time
@@ -25,35 +25,37 @@
 import {mapActions} from 'vuex'
 
 export default {
+  props: ['task', 'id'],
   data() {
     return {
-      taskToSubmit: {
-        name: '',
-        dueDate: '',
-        dueTime: '',
-        completed: false
-      }
+      taskToSubmit: {}
     }
   },
   methods: {
-    ...mapActions('tasks', ['addTask']),
+    ...mapActions('tasks', ['updateTask']),
     submitForm() {
       this.$refs.modalTaskName.$refs.name.validate()
-      if (!this.$refs.modalTaskName.$refs.name.hasError){
+      if (!this.$refs.modalTaskName.$refs.name.hasError) {
         this.submitTask()
       }
     },
-    submitTask(){
-      this.addTask(this.taskToSubmit)
+    submitTask() {
+      this.updateTask({
+        id: this.id,
+        updates: this.taskToSubmit
+      })
       this.$emit('close')
     }
   },
-  components:{
+  components: {
     'modal-header': require('components/Tasks/Modals/Shared/ModalHeader').default,
     'modal-task-name': require('components/Tasks/Modals/Shared/ModalTaskName').default,
     'modal-due-date': require('components/Tasks/Modals/Shared/ModalDueDate').default,
     'modal-due-time': require('components/Tasks/Modals/Shared/ModalDueTime').default,
     'modal-buttons': require('components/Tasks/Modals/Shared/ModalButtons').default
+  },
+  mounted() {
+    this.taskToSubmit = Object.assign({}, this.task)
   }
 
 }
