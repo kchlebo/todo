@@ -1,17 +1,26 @@
 <template>
   <q-page class="q-pa-md">
+    <div class="row q-mb-lg">
+      <search></search>
+    </div>
+
+    <p
+      v-if="search && !Object.keys(tasksTodo).length &&
+!Object.keys(tasksCompleted).length"
+    >No search results</p>
     <no-tasks
-      v-if="!Object.keys(tasksTodo).length"
+      v-if="!Object.keys(tasksTodo).length &&
+!search"
 
     ></no-tasks>
     <tasks-todo
-      v-else
-    :tasksTodo="tasksTodo"
+      v-if="Object.keys(tasksTodo).length"
+      :tasksTodo="tasksTodo"
     ></tasks-todo>
 
     <tasks-completed
       v-if="Object.keys(tasksCompleted).length"
-    :tasksCompleted="tasksCompleted"
+      :tasksCompleted="tasksCompleted"
     ></tasks-completed>
 
     <div class="absolute-bottom text-center q-mb-lg">
@@ -24,25 +33,26 @@
       />
     </div>
     <q-dialog v-model="showAddTask">
-    <add-task @close="showAddTask = false"></add-task>
+      <add-task @close="showAddTask = false"></add-task>
     </q-dialog>
   </q-page>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 
 
 export default {
-  data(){
-    return{
+  data() {
+    return {
       showAddTask: false
     }
   },
   computed: {
-    ...mapGetters('tasks', ['tasksTodo', 'tasksCompleted'])
+    ...mapGetters('tasks', ['tasksTodo', 'tasksCompleted']),
+    ...mapState('tasks', ['search'])
   },
-  mounted(){
+  mounted() {
     this.$root.$on('showAddTask', () => {
       this.showAddTask = true
     })
@@ -53,6 +63,7 @@ export default {
     'tasks-todo': require('components/Tasks/TasksTodo').default,
     'tasks-completed': require('components/Tasks/TasksCompleted').default,
     'no-tasks': require('components/Tasks/NoTasks').default,
+    'search': require('components/Tasks/Tools/Search').default,
   }
 
 }
