@@ -8,6 +8,7 @@
   <div>
 <list-header
 bgColor="bg-orange-4"
+v-if="!settings.showTasksInOneList"
 >Todo</list-header>
   <q-list
 
@@ -27,8 +28,15 @@ bgColor="bg-orange-4"
 
 <script>
 
+import {mapGetters} from "vuex";
+
 export default {
+
+
   props: ['tasksTodo'],
+  computed:{
+    ...mapGetters('settings', ['settings'])
+  },
 
   components: {
     'task':

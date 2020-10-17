@@ -18,7 +18,7 @@
       >
         <no-tasks
           v-if="!Object.keys(tasksTodo).length &&
-!search"
+!search && !settings.showTasksInOneList"
 
         ></no-tasks>
         <tasks-todo
@@ -63,7 +63,8 @@ export default {
   },
   computed: {
     ...mapGetters('tasks', ['tasksTodo', 'tasksCompleted']),
-    ...mapState('tasks', ['search'])
+    ...mapState('tasks', ['search']),
+    ...mapGetters('settings', ['settings'])
   },
   mounted() {
     this.$root.$on('showAddTask', () => {

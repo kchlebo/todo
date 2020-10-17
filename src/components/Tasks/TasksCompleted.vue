@@ -4,9 +4,12 @@
     enter-active-class="animated zoomIn"
     leave-active-class="animated zoomOut"
   >
-    <div class="q-mt-lg">
+    <div
+      :class="{'q-mt-lg' : !settings.showTasksInOneList}"
+    >
       <list-header
         bgColor="bg-green-4"
+        v-if="!settings.showTasksInOneList"
       >Completed
       </list-header>
       <q-list
@@ -27,9 +30,13 @@
 
 <script>
 
+import {mapGetters} from "vuex";
+
 export default {
   props: ['tasksCompleted'],
-
+  computed: {
+    ...mapGetters('settings', ['settings'])
+  },
   components: {
     'task':
     require('components/Tasks/Task').default,
